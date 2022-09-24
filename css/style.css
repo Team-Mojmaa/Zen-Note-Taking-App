@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Outfit:wght@300;400;600;700&family=Red+Hat+Display:wght@500;700;900&display=swap');
+*{
+    padding: 0;
+    box-sizing: border-box;
+    margin:0;
+    font-family: 'Lora', serif;
+    
+}
+:root{
+    --primary-color: #7895B2;
+    --secondary-color: #AEBDCA;
+    --third-color: #E8DFCA;
+    --fourth-color: #F5EFE6;
+    --small-spacing: 0.5rem;
+    --medium-spacing: 1rem;
+    --huge-spacing: 2rem;
+    --height-card: 300px;
+    --width-card: 300px;
+}
+body{
+    color: black;
+    background-color: var(--third-color);
+}
+a{
+    text-decoration: none;
+}
+
+.card{
+    height: var(--height-card);
+    width: var(--width-card);
+    background-color: var(--secondary-color);
+    margin: var(--small-padding);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.new-card{
+    display: flex;
+    flex-flow: column wrap;
+    align-content: space-around;
+}
+
+footer p a:hover{
+    color: black;
+}
+
+footer p a{
+    color: var(--primary-color);
+}
+
+footer{
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 20px;
+}
+
+#add-new{
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 10px;
+    font-size: 40px;
+}
+
+#add-new:hover{
+    background-color: var(--third-color);
+}
+
+#add-new:focus{
+    outline: none;
+}
+
+main{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.added-notes{
+    height: var(--height-card);
+    width: var(--width-card);
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#notes-list{
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--small-spacing);
+}
+
+/* #close-btn{
+background: linear-gradient(to right,var(--fourth-color));
+width: 100px;
+height: 40px;
+border-radius:10px;
+position: relative;
+z-index: 999;
+animation: coresDancantes 2s linear infinite;
+}
+@keyframes coresDancantes{
+    100%{
+        filter: hue-rotate(360deg);
+    }
+} */
