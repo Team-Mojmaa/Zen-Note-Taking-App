@@ -1,20 +1,33 @@
 const createButton = document.getElementById('add-new');
 const noteInput = document.getElementById('note-list');
 let newElement;
-const addedNotes = document.getElementsByClassName('added-notes');
 
-let idHash = 0;
+const addedNotes = document.getElementsByClassName('added-notes');
 
 let notesList = [];
 
+let counter = 0;
+
+
+
 createButton.addEventListener('click', () => {
+    counter++;
     let note = {
+        idHash: counter,
         title: "",
         description: "", 
         bold: false,
         underline: false,
         copy: false
     }
+
+    for(let notes of notesList){
+        console.log(notes)
+    }
+
+
+    
+
         newElement = document.createElement('div');
 
         newElement.innerHTML += `<div class="new-card">
@@ -24,12 +37,12 @@ createButton.addEventListener('click', () => {
         <label for="desc">Description</label>
         <textarea id="desc" name="desc" id="desc" col="20" rows="10"></textarea>
         <button id="add-btn">Add Note</button>
-        
+        <input type="hidden" value="`+note.idHash+`">
         <div id="format-options">
-            <button id="bold-btn">B</button>
-            <button id="underline-btn">U</button>
-            <button id="copy-btn">COPY</button>
-            <button id="delete-btn">DELETE</button></div>
+            <button id="bold-btn">Bold</button>
+            <button id="underline-btn">Underline</button>
+            <button id="copy-btn">Copy</button>
+            <button id="delete-btn">Clear</button></div>
         </div>`;
         document.body.appendChild(newElement);
 
@@ -42,32 +55,81 @@ createButton.addEventListener('click', () => {
         const cancelBtn = document.getElementById('close-btn');
         const clearData = document.getElementById('delete-btn');
 
+    function textSelection() {
+            let desc = document.getElementById('desc');
+            let descHTML = desc.innerHTML;
+            let selectionStart = 0;
+            let selectionEnd = 0;
+            if (desc.selectionStart) {
+                selectionStart = desc.selectionStart;
+            }
+            if (desc.selectionEnd) {
+                selectionEnd = desc.selectionEnd;
+            }
+            console.log("start_index:",selectionStart);
+            console.log("end_index:",selectionEnd);
+
+            return [selectionStart,selectionEnd]
+            
+            
+            // if (selectionStart != selectionEnd) {
+            //     var editorCharArray = editorHTML.split("");
+            //     editorCharArray.splice(selectionEnd, 0, "</b>");
+            //     editorCharArray.splice(selectionStart, 0, "<b>"); //must do End first
+            //     editorHTML = editorCharArray.join("");
+            //     editor.innerHTML = editorHTML;
+            // }
+        
+
+        // let selectedText = '';
+        // // window.getSelection
+        // let wSelectedObject = window.getSelection();
+        // let dSelectedObject = document.getSelection();
+
+        // let existingObject = wSelectedObject != null ? wSelectedObject : dSelectedObject;
+        // console.log("existing:",existingObject);
+        // if (existingObject) {
+        //     // console.log("dcument selection:",existingObject);
+        //     var start_index = existingObject.anchorOffset;
+        //     var end_index = existingObject.focusOffset;
+        //     if (start_index >= 0 && end_index >= 0){
+        //         console.log("start: " + start_index);
+        //         console.log("end: " + end_index);
+        //     }
+        //     selectedText = existingObject.toString().trim();
+        //     console.log("I am selected text: ", selectedText);
+        // }
+
+    //     var range = selection.getRangeAt(0);
+    // var start = range.startOffset;
+    // var end = range.endOffset;
+
+        // document.selection
+        // else if (document.selection) {
+        //     selectedText = 
+        //     document.selection.createRange().text;
+        // } 
+        // return selectedText;
+    }
 
         // bold button
     boldBtn.addEventListener('click', () => {
-        var selectedText = '';
-        // window.getSelection
-        if (window.getSelection) {
-            selectedText = window.getSelection();
-        }
-        // document.getSelection
-        else if (document.getSelection) {
-            selectedText = document.getSelection();
-        }
-        // document.selection
-        else if (document.selection) {
-            selectedText = 
-            document.selection.createRange().text;
-        } 
-        console.log("selected text:::",selectedText)
+        let selectedIndexArray = textSelection();
+        // save bold array indexes in object 
         
-        if(document.getElementById("desc").style.fontWeight == "bold"){
-            document.getElementById("desc").style.fontWeight = "normal";
-            }
-            
-            else{
-            document.getElementById("desc").style.fontWeight = "bold";
-            }
+        // alter html elements from this function
+        // show changes in current screen
+
+
+
+        // let selectText = textSelection()
+        // console.log(selectText)
+        // if(selectText.style.fontWeight == "bold"){
+        //     selectText.style.fontWeight = "normal";
+        //     }
+        //     else{
+        //     selectText.style.fontWeight = "bold";
+        //     }
     });
 
     // underline button
@@ -100,33 +162,45 @@ createButton.addEventListener('click', () => {
     // function 1. write bold and underline text after click of button
     // function 2. grab selected text on button click and apply changes
     // saving it for later review again in note object: note.bold = "string selected"
-    // 😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱😱
+    //
 
 
     document.getElementById('copy-btn').addEventListener("click", function(){
         note.copy = true;
     });
 
+
     function appendNewNoteToSection(note) {
-        idHash++;   //for unique id everytime for every notes
+         //for unique id everytime for every notes
 
         let noteSection = document.getElementById('notes-list');
         let newCard = document.createElement('div');
         newCard.classList.add('added-notes');
-        newCard.classList.add('note-'+idHash);
+        newCard.classList.add('note-'+counter);
 
-        let idForButton = "delete-btn-"+idHash;
+        let idForButton = "btn-"+counter; //for unique id for button everytime for every notes
 
         newCard.innerHTML = 
         "<h1>"+note.title+"</h2>"+
         "<p>"+note.description+"</p>"+
+        "<input type="+"hidden"+" value="+note.idHash+">"+
+        // `<button id="delete-btn">`+"delete"+"</button>";
         "<button id='"+idForButton+"'>"+" Delete </button>";
-    
-
         console.log(newCard);
         noteSection.appendChild(newCard);
-        console.log(notesList);
+        
+        
+        
+        // console.log(notesList);
+        // console.log("note-"+idHash.toString())
+ //        cardDelete = document.getElementById("note-"+idHash.toString());
+ //        console.log(cardDelete);
+ //        const deleteButton = document.querySelector('#delete-btn-'+idHash.toString());
+ //        deleteButton.addEventListener('click', () => {noteSection. removeChild(cardDelete);})
     }
+
+// delete added-notes
+    
 
     addData.addEventListener('click', () => {
         let title = document.getElementById('title').value;
@@ -138,10 +212,12 @@ createButton.addEventListener('click', () => {
             note.description = desc;
             // Add note to array
             notesList.push(note);
-            console.log(notesList);
+            // console.log(notesList);
 
             //appending new note in notes-list section 
             appendNewNoteToSection(note)
+            document.body.removeChild(newElement);
+            
         }
         else if (( title.length === 0) && (desc.length === 0)){
             alert("Please enter Title and Description")
@@ -154,25 +230,6 @@ createButton.addEventListener('click', () => {
     }
 
 );
-
-// add button
-// function add(){
-//     const title = document.getElementById("title").value;
-//     const desc = document.getElementById("desc").value;
-
-//     const newNote = document.createElement('div');
-//     newNote.innerHTML += `<div class="note">
-//     <h3>${title}</h3>
-//     <p>${desc}</p>
-//     </div>`;
-//     noteInput.appendChild(newNote);
-    
-//     document.getElementById("title").value = "";
-//     document.getElementById("desc").value = "";
-// }
-// addData.addEventListener('click', () => {
-//     add();
-// });
 
     // cancel button
     cancelBtn.addEventListener('click', () => {
@@ -194,6 +251,14 @@ createButton.addEventListener('click', () => {
 });
 
 
+//add a eventListener for div
+let divs = document.getElementsByTagName('div');
+
+for(let aDiv of divs){
+    divs.addEventListener('click', (e)=>{
+        console.log(e, aDiv);
+    });
+}
 
 
 // document.addEventListener("DOMContentLoaded", function(){
@@ -242,3 +307,4 @@ createButton.addEventListener('click', () => {
 //     `;
 //     noteContainer.appendChild(newUINote);
 //   }
+
