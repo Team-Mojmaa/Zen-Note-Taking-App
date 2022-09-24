@@ -1,16 +1,21 @@
 const createButton = document.getElementById('add-new');
-const noteInput = document.getElementById('note-list');
 let newElement;
 
-const addedNotes = document.getElementsByClassName('added-notes');
+// const addedNotes = document.getElementsByClassName('added-notes');
 
 let notesList = [];
-
 let counter = 0;
 
 
+// I. function-1 : click on + and pop-window of new note
+// I. function-2: i. added details of new note / ii. bold / iii. underline.....in object note and pop-window close
+
+// II. function-3: apendingNewNoteTosection ???? display notesList as newcards!
+// function-4: click on any note with an id and fetch data from note object and display on new-pop window
+
 
 createButton.addEventListener('click', () => {
+    // function-1: creates a pop-up window and generates and returns its id-hash
     counter++;
     let note = {
         idHash: counter,
@@ -21,16 +26,13 @@ createButton.addEventListener('click', () => {
         copy: false
     }
 
-    for(let notes of notesList){
-        console.log(notes)
-    }
-
-
-    
+    // for(let notes of notesList){
+    //     console.log(notes)
+    // } // for checking notesList
 
         newElement = document.createElement('div');
 
-        newElement.innerHTML += `<div class="new-card">
+        newElement.innerHTML += `<div class="add-card">
         <button id="close-btn">&times;</button>
         <label for="title">Title</label>
         <input type="text" name="title" id="title">
@@ -44,16 +46,78 @@ createButton.addEventListener('click', () => {
             <button id="copy-btn">Copy</button>
             <button id="delete-btn">Clear</button></div>
         </div>`;
+        // display pop-up  
         document.body.appendChild(newElement);
 
-
-        // button functions
-        const boldBtn = document.getElementById('bold-btn');
-        const underlineBtn = document.getElementById('underline-btn');
-        const copyBtn = document.getElementById('copy-btn');
+        // button functions of pop-up window
+        // const boldBtn = document.getElementById('bold-btn');
+        // const underlineBtn = document.getElementById('underline-btn');
+        // const copyBtn = document.getElementById('copy-btn');
         const addData = document.getElementById('add-btn');
         const cancelBtn = document.getElementById('close-btn');
         const clearData = document.getElementById('delete-btn');
+
+        // cancel button function-2(i)
+        cancelBtn.addEventListener('click', () => {
+            document.body.removeChild(newElement);
+        });
+
+        // clear button function-2(ii)
+        clearData.addEventListener('click', () => {
+            let userChoice = prompt("Are you sure Buddy?", 'Yes');
+
+            if(userChoice != 'Yes'){
+                return;
+            }
+            
+            document.getElementById("title").value = "";
+            document.getElementById("desc").value = "";
+        });
+
+        // push bold, underline, copy data here later after figuring out selection and html part!!!!!!!!!!
+
+        addData.addEventListener('click', () => {
+            // function-2(main): add details of new note
+            let title = document.getElementById('title').value;
+            let desc = document.getElementById('desc').value;
+            console.log('title:',title);
+            console.log('desc:',desc);
+            if ((title.length > 0) && (desc.length > 0)) {
+                note.title = title;
+                note.description = desc;
+                // Add note to array
+                notesList.push(note);
+                console.log("notesList array from addData",notesList);
+        
+                //appending new note in notes-list section 
+                // make changes in note object for bold/underline part before appending it to new section!!!!!!!!
+                
+                // appendNewNoteToSection(note)
+                // remove pop-up window
+                document.body.removeChild(newElement);
+                // displayNotesListAsCards
+                displayNotesListAsCards()
+                
+            }
+            else if (( title.length === 0) && (desc.length === 0)){
+                alert("Please enter Title and Description")
+            } else if (title.length === 0){
+                alert("Please enter Title for the note")
+            } else {
+                alert("Please enter Description for the note")
+            }
+
+        });
+
+});
+
+        const boldBtn = document.getElementById('bold-btn');
+        const underlineBtn = document.getElementById('underline-btn');
+        const copyBtn = document.getElementById('copy-btn');
+
+
+
+        
 
     function textSelection() {
             let desc = document.getElementById('desc');
@@ -169,25 +233,83 @@ createButton.addEventListener('click', () => {
         note.copy = true;
     });
 
+    
 
-    function appendNewNoteToSection(note) {
-         //for unique id everytime for every notes
+    function displayNotesListAsCards() {
+        // show title and desc of each note card on window
+        let notesListView = document.getElementById("notes-list");
 
-        let noteSection = document.getElementById('notes-list');
-        let newCard = document.createElement('div');
-        newCard.classList.add('added-notes');
-        newCard.classList.add('note-'+counter);
+        let currentNote = notesList[notesList.length - 1];
+        // for(let note of notesList){
+        console.log('noteslist inside displayNotesListAsCards():',notesList)
+        console.log('currentnote inside displayNotesListAsCards():',currentNote)
+        
+        let newCard = document.createElement('section');
+        newCard.innerHTML += `<div class="new-card" id=`+currentNote.idHash+`>
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" value=`+currentNote.title+`>
+            <label for="desc">Description</label>
+        <textarea id="desc" name="desc" id="desc" col="20" rows="10">`+currentNote.description+`</textarea>`;
+        notesListView.appendChild(newCard);
+     
+        // on click of window - give a new function of display particular card in pop-up window
+            
 
-        let idForButton = "btn-"+counter; //for unique id for button everytime for every notes
+        // document.addEventListener('click',function(e){
+        //     if(e.target) {
+        //         let idOfCurrentNote = e.target.id;
+        //         for (note of notesList) {
+        //             if (note.idHash === idOfCurrentNote){
+        //                 let popUpView = document.createElement('div');
 
-        newCard.innerHTML = 
-        "<h1>"+note.title+"</h2>"+
-        "<p>"+note.description+"</p>"+
-        "<input type="+"hidden"+" value="+note.idHash+">"+
-        // `<button id="delete-btn">`+"delete"+"</button>";
-        "<button id='"+idForButton+"'>"+" Delete </button>";
-        console.log(newCard);
-        noteSection.appendChild(newCard);
+        //                 popUpView.innerHTML += `<div class="view-card">
+        //                 <button id="close-btn">&times;</button>
+        //                 <label for="title">Title</label>
+        //                 <input type="text" name="title" id="title" value=`+note.title+`>
+        //                 <label for="desc">Description</label>
+        //                 <textarea id="desc" name="desc" id="desc" col="20" rows="10">`+note.description+`</textarea>
+        //                 <button id="update-btn">Update Note</button>
+        //                 <input type="hidden" value="`+note.idHash+`">
+        //                 <div id="format-options">
+        //                     <button id="bold-btn">Bold</button>
+        //                     <button id="underline-btn">Underline</button>
+        //                     <button id="copy-btn">Copy</button>
+        //                 </div>`;
+        //                 // display pop-up  
+        //                 // if plan to add delete button - take it from here
+        //                 //  <button id="delete-btn">Delete</button></div>
+        //                 document.body.appendChild(popUpView);
+                
+        //             } 
+        //           //do something
+        //      }
+        //     }
+        //  });
+        // const oldUpdateCard = document.getElementsByClassName("new-card");
+            
+        // oldUpdateCard.addEventListener('click', popUpViewCard)
+        
+
+    }
+
+    // function appendNewNoteToSection(note) {
+    //      //for unique id everytime for every notes
+
+    //     let noteSection = document.getElementById('notes-list');
+    //     let newCard = document.createElement('div');
+    //     newCard.classList.add('added-notes');
+    //     newCard.classList.add('note-'+counter);
+
+    //     let idForButton = "btn-"+counter; //for unique id for button everytime for every notes
+
+    //     newCard.innerHTML = 
+    //     "<h1>"+note.title+"</h2>"+
+    //     "<p>"+note.description+"</p>"+
+    //     "<input type="+"hidden"+" value="+note.idHash+">"+
+    //     // `<button id="delete-btn">`+"delete"+"</button>";
+    //     "<button id='"+idForButton+"'>"+" Delete </button>";
+    //     console.log(newCard);
+    //     noteSection.appendChild(newCard);
         
         
         
@@ -197,68 +319,22 @@ createButton.addEventListener('click', () => {
  //        console.log(cardDelete);
  //        const deleteButton = document.querySelector('#delete-btn-'+idHash.toString());
  //        deleteButton.addEventListener('click', () => {noteSection. removeChild(cardDelete);})
-    }
+// }
 
 // delete added-notes
+
+
     
-
-    addData.addEventListener('click', () => {
-        let title = document.getElementById('title').value;
-        let desc = document.getElementById('desc').value;
-        console.log('title:',title);
-        console.log('desc:',desc);
-        if ((title.length > 0) && (desc.length > 0)) {
-            note.title = title;
-            note.description = desc;
-            // Add note to array
-            notesList.push(note);
-            // console.log(notesList);
-
-            //appending new note in notes-list section 
-            appendNewNoteToSection(note)
-            document.body.removeChild(newElement);
-            
-        }
-        else if (( title.length === 0) && (desc.length === 0)){
-            alert("Please enter Title and Description")
-        } else if (title.length === 0){
-            alert("Please enter Title for the note")
-        } else {
-            alert("Please enter Description for the note")
-        }
-        
-    }
-
-);
-
-    // cancel button
-    cancelBtn.addEventListener('click', () => {
-        document.body.removeChild(newElement);
-    });
-
-    // clear button
-    clearData.addEventListener('click', () => {
-        let userChoice = prompt("Are you sure Buddy?", 'Yes');
-
-        if(userChoice != 'Yes'){
-            return;
-        }
-        
-        document.getElementById("title").value = "";
-        document.getElementById("desc").value = "";
-    });
-
-});
 
 
 //add a eventListener for div
-let divs = document.getElementsByTagName('div');
+// let divs = document.getElementsByTagName('div');
 
-for(let aDiv of divs){
-    divs.addEventListener('click', (e)=>{
-        console.log(e, aDiv);
-    });
-}
+// for(let aDiv of divs){
+//     divs.addEventListener('click', (e)=>{
+//         console.log(e, aDiv);
+//     });
+// }
 
 
 // document.addEventListener("DOMContentLoaded", function(){
