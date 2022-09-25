@@ -213,6 +213,8 @@ main{
     transition: 0.5s ease-in-out;
 }
 
+
+
 .new-card:before {
     content: '';
     background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
@@ -309,7 +311,7 @@ main{
     border-radius: 20px;
 }
 
-.view-card .update-btn{
+.view-card #update-btn{
     border: none;
     background-color: brown;
     border-radius: 17px;
@@ -318,7 +320,7 @@ main{
     color: var(--fourth-color);
 }
 
-.view-card .update-btn:hover{
+.view-card #update-btn:hover{
     background-color:rgb(181, 72, 18);
 }
 
@@ -328,3 +330,6 @@ main{
     min-width: 100%;
     min-height: 30%;
 }
+
+
+

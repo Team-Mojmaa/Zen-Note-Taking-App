@@ -61,6 +61,7 @@ function popUpUpdate(event){
                 <button id="bold-btn-View">Bold</button>
                 <button id="underline-btn-View">Underline</button>
                 <button id="copy-btn-View">Copy</button>
+                <button id="copy-all-btn-View">Copy All</button>
             </div>`;
             // display pop-up  
             // if plan to add delete button - take it from here
@@ -75,9 +76,21 @@ function popUpUpdate(event){
             const copyBtnView = document.getElementById("copy-btn-View");
             const updateBtn = document.getElementById("update-btn");
             const closeBtnView = document.getElementById("close-btn-View");
+            const copyAllViewBtn = document.getElementById("copy-all-btn-View");
             boldBtnView.addEventListener('click', ()=>{
                 document.execCommand('bold');
                 var text = document.getElementById('descView').innerHTML;
+                
+            });
+
+            copyAllViewBtn.addEventListener('click', () => {
+                var range = document.createRange();
+                range.selectNode(document.getElementById("descView"));
+                window.getSelection().removeAllRanges(); // clear current selection
+                window.getSelection().addRange(range); // to select text
+                document.execCommand("copy");
+                window.getSelection().removeAllRanges();// to deselect
+                alert("Description copied to clipboard!");
                 
             });
         
@@ -90,6 +103,7 @@ function popUpUpdate(event){
             copyBtnView.addEventListener('click', ()=>{
                 document.execCommand('copy');
                 var text = document.getElementById('descView').innerHTML;
+                // var titleText = document.getElementById('titleView').value;
                 
             });
 
@@ -100,6 +114,7 @@ function popUpUpdate(event){
 
             updateBtn.addEventListener('click', ()=>{
                 var text = document.getElementById('descView').innerHTML;
+                var titleText = document.getElementById('titleView').value;
                 
                 note.description = text;
                 // updating altered note in notesList array
@@ -107,7 +122,7 @@ function popUpUpdate(event){
                     if (noteObject.idHash == note.idHash ){
                         console.log("from inside the loop of.... updating altered note in notesList array ");
                         noteObject.description = text;
-                        noteObject.title = note.title;
+                        noteObject.title = titleText;
                     }
                 }   
                 //delete prev with same id
@@ -194,6 +209,7 @@ createButton.addEventListener('click', () => {
         <button id="bold-btn">Bold</button>
         <button id="underline-btn">Underline</button>
         <button id="copy-btn">Copy</button>
+        <button id="copy-all-btn">Copy All</button>
         <button id="delete-btn">Clear</button></div>
     </div>
     </div>`;
@@ -210,6 +226,18 @@ createButton.addEventListener('click', () => {
     const addData = document.getElementById('add-btn');
     const cancelBtn = document.getElementById('close-btn');
     const clearData = document.getElementById('delete-btn');
+    const copyAll = document.getElementById('copy-all-btn');
+
+    // copy All button
+    copyAll.addEventListener('click', () => {
+        var range = document.createRange();
+        range.selectNode(document.getElementById("desc"));
+        window.getSelection().removeAllRanges(); // clear current selection
+        window.getSelection().addRange(range); // to select text
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();// to deselect
+        alert("Description copied to clipboard!");
+    });
 
     // cancel button function-2(i)
     cancelBtn.addEventListener('click', () => {
@@ -225,7 +253,7 @@ createButton.addEventListener('click', () => {
         }
         
         document.getElementById("title").value = "";
-        document.getElementById("desc").value = "";
+        document.getElementById("desc").innerText = "";
     });
 
     // push bold, underline, copy data here later after figuring out selection and html part!!!!!!!!!!
@@ -339,6 +367,7 @@ createButton.addEventListener('click', () => {
     copyBtn.addEventListener('click', ()=>{
         document.execCommand('copy');
         var text = document.getElementById('desc').innerHTML;
+        // var titleText = document.getElementById('titleText').innerHTML;
         // $('#desc').html(text);
     });
    
