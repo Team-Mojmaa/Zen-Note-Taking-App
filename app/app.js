@@ -25,9 +25,6 @@ createButton.addEventListener('click', () => {
         console.log(notes)
     }
 
-
-    
-
         newElement = document.createElement('div');
 
         newElement.innerHTML += `<div class="new-card">
@@ -238,6 +235,10 @@ createButton.addEventListener('click', () => {
 
                 });
             }
+
+            const addingElems = document.getElementsByClassName('new-card');
+            for(let elem of addingElems)
+                elem.remove();
 
         }
         else if (( title.length === 0) && (desc.length === 0)){
