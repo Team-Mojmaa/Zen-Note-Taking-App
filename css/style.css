@@ -41,7 +41,7 @@ header h1{
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+   
 }
 
 .desc-box{
@@ -159,7 +159,7 @@ main{
     width: 50%;
     height: 500px;
     background-color: var(--third-color);
-    padding: 30px;
+    padding: 35px;
     border-radius: 20px;
 }
 
@@ -195,23 +195,6 @@ main{
     margin: 20px;
 }
 
-
-
-
-/* #close-btn{
-background: linear-gradient(to right,var(--fourth-color));
-width: 100px;
-height: 40px;
-border-radius:10px;
-position: relative;
-z-index: 999;
-animation: coresDancantes 2s linear infinite;
-}
-@keyframes coresDancantes{
-    100%{
-        filter: hue-rotate(360deg);
-    }
-} */
 .new-card {
     
     border: none;
@@ -253,9 +236,9 @@ animation: coresDancantes 2s linear infinite;
     color: #000
 }
 
-.new-card:active:after {
+/* .new-card:active:after {
     background: transparent;
-}
+} */
 
 .new-card:hover:before {
     opacity: 1;

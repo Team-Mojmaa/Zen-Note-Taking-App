@@ -1,3 +1,4 @@
+"use strict"
 const createButton = document.getElementById('add-new');
 // const noteInput = document.getElementById('note-list');
 
@@ -13,7 +14,7 @@ console.log("step1: global var notesList,counter:",notesList,counter)
 
 // II. function-3: apendingNewNoteTosection ???? display notesList as newcards! displayNewNoteInCardsView()!
 // II. function-4: click on any note with an id and fetch data from note object and display on new-pop window
-
+let displayNewNote = false;
 
 function displayNewNoteInCardsView() {
     // II. function-3: show title and desc of each note card on window
@@ -31,52 +32,122 @@ function displayNewNoteInCardsView() {
     <h2>Description</h2>
     <p id="desc`+currentNote.idHash+`">`+currentNote.description+`</p>
     </div>`;
-    notesListView.appendChild(newCard);
+    notesListView.appendChild(newCard); //visible on body
     console.log('step3(ii): display of currentNote on boday with idHash: ',currentNote.idHash)
     
+    console.log("akash - test: +"+displayNewNote);
+
+    console.log("here!!!!!!")
     // on click of window - give a new function of display particular card in pop-up window
     const allCards = document.getElementsByClassName("new-card");
-    
+        
     for(let aCard of allCards){
-        aCard.addEventListener('click',function(e){
-            let idOfCurrentNote = Number(aCard.id);
-            console.log(idOfCurrentNote);
-            for (note of notesList) {
-                console.log("inside notesList array of aCard")
-                if (note.idHash === idOfCurrentNote) {
-                    let popUpView = document.createElement('div');
-                    popUpView.innerHTML += `<div class="view-card">
-                    <button id="close-btn-View">&times;</button>
-                    <label for="titleView">Title</label>
-                    <input type="text" name="titleView" id="titleView" value=`+note.title+`>
-                    <label for="descView">Description</label>
-                    <textarea name="descView" id="descView" col="20" rows="10">`+note.description+`</textarea>
-                    <button id="update-btn">Update Note</button>
-                    <input type="hidden" value="`+note.idHash+`">
-                    <div id="format-options-View">
-                        <button id="bold-btn-View">Bold</button>
-                        <button id="underline-btn-View">Underline</button>
-                        <button id="copy-btn-View">Copy</button>
-                    </div>`;
-                    // display pop-up  
-                    // if plan to add delete button - take it from here
-                    // <button id="delete-btn-View">Delete</button></div>
-                    document.body.appendChild(popUpView);
-                    // functionality of bold/underline/copy
-                    // edit in note object
-                    console.log("popUpvIEW displayed")
+        aCard.addEventListener('click', 
+             //update note
+function popUpUpdate(event){
+    let idOfCurrentNote = Number(aCard.id);
+    console.log(idOfCurrentNote);
+    for (let note of notesList) {
+        console.log("inside notesList array of aCard")
+        if (note.idHash === idOfCurrentNote) {
+            let popUpView = document.createElement('div');
+            popUpView.innerHTML = `<div class="view-card">
+            <button id="close-btn-View">&times;</button>
+            <label for="titleView">Title</label>
+            <input type="text" name="titleView" id="titleView" value=`+note.title+`>
+            <label for="descView">Description</label>
+            <div name="descView" id="descView" col="20" rows="10"div contenteditable="true" role="textbox" name="desc" id="desc" col="20" rows="10" class="desc-box">`+note.description+`</div>
+            <button id="update-btn">Update Note</button>
+            <input type="hidden" value="`+note.idHash+`">
+            <div id="format-options-View">
+                <button id="bold-btn-View">Bold</button>
+                <button id="underline-btn-View">Underline</button>
+                <button id="copy-btn-View">Copy</button>
+            </div>`;
+            // display pop-up  
+            // if plan to add delete button - take it from here
+            // <button id="delete-btn-View">Delete</button></div>
+            document.body.appendChild(popUpView);
+            // functionality of bold/underline/copy
+            // edit in note object
+            console.log("popUpvIEW displayed")
 
-                    setTimeOut(()=>{}, 3000);
-    
-                    document.body.removeChild(popUpView);
-                } 
-            }
+            const boldBtnView = document.getElementById("bold-btn-View");
+            const underlineBtnView = document.getElementById("underline-btn-View");
+            const copyBtnView = document.getElementById("copy-btn-View");
+            const updateBtn = document.getElementById("update-btn");
+            const closeBtnView = document.getElementById("close-btn-View");
+            boldBtnView.addEventListener('click', ()=>{
+                document.execCommand('bold');
+                var text = document.getElementById('descView').innerHTML;
+                
             });
+        
+            underlineBtnView.addEventListener('click', ()=>{
+                document.execCommand('underline');
+                var text = document.getElementById('descView').innerHTML;
+                
+            });
+        
+            copyBtnView.addEventListener('click', ()=>{
+                document.execCommand('copy');
+                var text = document.getElementById('descView').innerHTML;
+                
+            });
+
+            closeBtnView.addEventListener('click', ()=>{ 
+                document.body.removeChild(popUpView);
+            });
+            
+
+            updateBtn.addEventListener('click', ()=>{
+                var text = document.getElementById('descView').innerHTML;
+                
+                note.description = text;
+                for (let noteObject of notesList){
+                    if (noteObject.idHash == note.idHash ){
+                        console.log("from inside the loop ");
+                        noteObject.description = text;
+                        noteObject.title = note.title;
+                    }
+                }   
+                //delete prev with same id
+                // console.log('test by akash - '+popUpView);
+                // if(popUpView){
+                    // console.log('test by akash - '+popUpView);
+                console.log("!!!!!printing notesList array after popViewClose and array update:",notesList);
+                document.body.removeChild(popUpView);
+                // }
+                
+                let elem = document.getElementById(note.idHash);
+                let titleElem = elem.querySelector('#title'+note.idHash);
+                let descElem = elem.querySelector('#desc'+note.idHash);
+
+                console.log("VVIMP:===> "+titleElem+" "+descElem);
+                descElem.innerHTML = text;
+                titleElem.innerHTML = note.title;
+                // if(elem)
+                // notesListView.removeChild(elem);
+                
+                // displayNewNoteInCardsView();
+                
+            });
+
+        
+            
+
+                            
+        } 
     }
+}
+
+        );
+    }
+    
+    
     // const oldUpdateCard = document.getElementsByClassName("add-card");    
     // oldUpdateCard.addEventListener('click', popUpViewCard)
     
-
 }
 
 createButton.addEventListener('click', () => {
@@ -87,9 +158,7 @@ createButton.addEventListener('click', () => {
         idHash: counter,
         title: "",
         description: "", 
-        bold: false,
-        underline: false,
-        copy: false
+        
     }
     console.log('step2(ii): print note object on every + button click: ',note)
 
@@ -148,96 +217,146 @@ createButton.addEventListener('click', () => {
     });
 
     // push bold, underline, copy data here later after figuring out selection and html part!!!!!!!!!!
-    function textSelection() {
-            let desc = document.getElementById('desc');
+    // function textSelection() {
+    //         let desc = document.getElementById('desc');
             
-            // let selectionStart = 0;
-            // let selectionEnd = 0;
-            // if (desc.selectionStart) {
-            //     selectionStart = desc.selectionStart;
-            // }
-            // if (desc.selectionEnd) {
-            //     selectionEnd = desc.selectionEnd;
-            // }
-            // console.log("start_index:",selectionStart);
-            // console.log("end_index:",selectionEnd);
+    //         // let selectionStart = 0;
+    //         // let selectionEnd = 0;
+    //         // if (desc.selectionStart) {
+    //         //     selectionStart = desc.selectionStart;
+    //         // }
+    //         // if (desc.selectionEnd) {
+    //         //     selectionEnd = desc.selectionEnd;
+    //         // }
+    //         // console.log("start_index:",selectionStart);
+    //         // console.log("end_index:",selectionEnd);
         
-            // return [selectionStart,selectionEnd]
-            var selection = window.getSelection();
-            var start = selection.anchorOffset;
-            var end = selection.focusOffset;
-            return [start,end]
-    }
+    //         // return [selectionStart,selectionEnd]
+    //         var selection = window.getSelection();
+    //         var start = selection.anchorOffset;
+    //         var end = selection.focusOffset;
+    //         return [start,end]
+    // }
     
-    boldBtn.addEventListener('click', ()=>{
-        console.log("text-selection", textSelection());
-        let selectionIndexes = textSelection();
-        start_index = selectionIndexes[0];
-        end_index = selectionIndexes[1];
-        difference = end_index - start_index;
-        let descContent = document.getElementById('desc').value;
-        console.log("descContent: "+descContent)
+    // boldBtn.addEventListener('click', ()=>{
+    //     console.log("text-selection", textSelection());
+    //     let selectionIndexes = textSelection();
+    //     start_index = selectionIndexes[0];
+    //     end_index = selectionIndexes[1];
+    //     difference = end_index - start_index;
+    //     let descContent = document.getElementById('desc').value;
+    //     console.log("descContent: "+descContent)
 
-        // let contentBefore = "";
-        // let contentAfter = "";
-        // let startAdding = false;
-        // let selectedText = '';
+    //     // let contentBefore = "";
+    //     // let contentAfter = "";
+    //     // let startAdding = false;
+    //     // let selectedText = '';
 
-        // const len = descContent.length(); errror!
+    //     // const len = descContent.length(); errror!
         
-        // for(let i = 0; i<len; i++){
-        //     console.log(i+" "+descContent[i]);
-        //     // increment strong between '<' and '>' to ignore html tags
-        //     if(descContent[i] == '<'){
-        //         while(i < descContent.length() && descContent[i] != '>'){
-        //             i++;
-        //         }
-        //     }
+    //     // for(let i = 0; i<len; i++){
+    //     //     console.log(i+" "+descContent[i]);
+    //     //     // increment strong between '<' and '>' to ignore html tags
+    //     //     if(descContent[i] == '<'){
+    //     //         while(i < descContent.length() && descContent[i] != '>'){
+    //     //             i++;
+    //     //         }
+    //     //     }
 
-        //     if(i >= len)
-        //         break;
+    //     //     if(i >= len)
+    //     //         break;
             
-        //     let currentChar = descContent[i];
+    //     //     let currentChar = descContent[i];
             
-        //     if (i === startIndex) {
-        //         startAdding = true;
-        //     }
+    //     //     if (i === startIndex) {
+    //     //         startAdding = true;
+    //     //     }
 
-        //     if(startAdding){
-        //         selectedText += currentChar;
-        //     }
+    //     //     if(startAdding){
+    //     //         selectedText += currentChar;
+    //     //     }
 
-        //     if(selectedText.length() == difference){
-        //         startAdding = false;
-        //     }
+    //     //     if(selectedText.length() == difference){
+    //     //         startAdding = false;
+    //     //     }
 
-        // }
+    //     // }
 
-        // loop through descContent to add <strong> and </strong> around startIndex and endIndex
-        // when we find startIndex-1, we can insert <strong>
-        // when we find endIndex+1, append </strong>
-        console.log("object of description input area",document.getElementById('desc'))
-        let descHTML = document.getElementById('desc').innerHTML;
-        const lenInnerHTML = descHTML.length;
-        console.log("descHTML::",descHTML);
-        console.log("start_index,end_index::",start_index,end_index);
-        console.log("length of descHTML::",lenInnerHTML)
-        contentBeforeStartTag = descHTML.slice(0,start_index)
-        contentBetween = descHTML.slice(start_index,end_index+1)
-        contentAfterEndTag = descHTML.slice(end_index+1, lenInnerHTML)
-        desc.innerHTML = contentBeforeStartTag +`<strong>`+contentBetween +`</strong>`+contentAfterEndTag;
-            // for(let i = 0; i<=len; i++){
-            //     if (i == start_index - 1){
-            //         desc.innerHTML +=`<strong>`
-            //     }
-            //     if (i == (end_index + 1)) {
-            //         desc.innerHTML +=`</strong>`
-            //     }
-            // }
+    //     // loop through descContent to add <strong> and </strong> around startIndex and endIndex
+    //     // when we find startIndex-1, we can insert <strong>
+    //     // when we find endIndex+1, append </strong>
+    //     console.log("object of description input area",document.getElementById('desc'))
+    //     let descHTML = document.getElementById('desc').innerHTML;
+    //     const lenInnerHTML = descHTML.length;
+    //     console.log("descHTML::",descHTML);
+    //     console.log("start_index,end_index::",start_index,end_index);
+    //     console.log("length of descHTML::",lenInnerHTML)
+    //     contentBeforeStartTag = descHTML.slice(0,start_index)
+    //     contentBetween = descHTML.slice(start_index,end_index+1)
+    //     contentAfterEndTag = descHTML.slice(end_index+1, lenInnerHTML)
+    //     desc.innerHTML = contentBeforeStartTag +`<strong>`+contentBetween +`</strong>`+contentAfterEndTag;
+    //         // for(let i = 0; i<=len; i++){
+    //         //     if (i == start_index - 1){
+    //         //         desc.innerHTML +=`<strong>`
+    //         //     }
+    //         //     if (i == (end_index + 1)) {
+    //         //         desc.innerHTML +=`</strong>`
+    //         //     }
+    //         // }
 
 
 
+    // });
+
+    // $('#textarea').keyup(function() {
+    //     $('#textarea-show').html($(this).text());
+    //   });
+
+    boldBtn.addEventListener('click', ()=>{
+        document.execCommand('bold');
+        var text = document.getElementById('desc').innerHTML;
+        // $('#desc').html(text);
     });
+
+    underlineBtn.addEventListener('click', ()=>{
+        document.execCommand('underline');
+        var text = document.getElementById('desc').innerHTML;
+        // $('#desc').html(text);
+    });
+
+    copyBtn.addEventListener('click', ()=>{
+        document.execCommand('copy');
+        var text = document.getElementById('desc').innerHTML;
+        // $('#desc').html(text);
+    });
+   
+    //   $('#boldBtn').on('click', function() {
+    //     document.execCommand('bold');
+    //     var text = document.getElementById('desc').innerHTML;
+    //     $('#desc').html(text);
+    //   });
+
+
+    //   $('#italic_btn').on('click', function() {
+    //     document.execCommand('italic');
+    //     var text = document.getElementById('textarea').innerHTML;
+    //     $('#textarea-show').html(text);
+    //   });
+      
+    //   $('#underlineBtn').on('click', ()=> {
+    //       document.execCommand('underline');
+    //     var text = document.getElementById('textarea').innerHTML;
+    //     $('#textarea-show').html(text);
+    //   });
+
+    //   $('#copyBtn').on('click', ()=> {
+    //     document.execCommand('copy');
+    //   var text = document.getElementById('textarea').innerHTML;
+    //   $('#textarea-show').html(text);
+    // });
+
+
+
 
     addData.addEventListener('click', () => {
         // function-2(main): add details of new note
@@ -245,7 +364,7 @@ createButton.addEventListener('click', () => {
         console.log("dc:",document.body)
         // console.log("title${note.idHash}",title+ ${note.idHash});
         let title = document.getElementById("title").value;
-        let desc = document.getElementById("desc").value;
+        let desc = document.getElementById("desc").innerHTML;
         console.log('step2(v):title from addData:',title);
         console.log('step2(v):desc from addData:',desc);
         if ((title.length > 0) && (desc.length > 0)) {
