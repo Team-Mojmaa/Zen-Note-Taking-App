@@ -8,7 +8,7 @@ let notesList = [];
 
 let counter = 0;
 
-
+let idHash = 0;
 
 createButton.addEventListener('click', () => {
     counter++;
@@ -171,25 +171,28 @@ createButton.addEventListener('click', () => {
 
 
     function appendNewNoteToSection(note) {
-         //for unique id everytime for every notes
+        idHash++;   //for unique id everytime for every notes
 
         let noteSection = document.getElementById('notes-list');
         let newCard = document.createElement('div');
         newCard.classList.add('added-notes');
-        newCard.classList.add('note-'+counter);
+        newCard.classList.add('note-'+idHash);
 
-        let idForButton = "btn-"+counter; //for unique id for button everytime for every notes
+        let idForButton = "delete-btn-"+idHash;
+        let classForBtn = 'note-'+idHash;
 
         newCard.innerHTML = 
         "<h1>"+note.title+"</h2>"+
         "<p>"+note.description+"</p>"+
-        "<input type="+"hidden"+" value="+note.idHash+">"+
-        // `<button id="delete-btn">`+"delete"+"</button>";
-        "<button id='"+idForButton+"'>"+" Delete </button>";
+        "<button class='"+classForBtn+" del-btn' id='"+idForButton+"'>"+" Delete </button>";
+    
+
         console.log(newCard);
+
         noteSection.appendChild(newCard);
-        
-        
+
+        console.log(notesList);
+    
         
         // console.log(notesList);
         // console.log("note-"+idHash.toString())
@@ -212,12 +215,30 @@ createButton.addEventListener('click', () => {
             note.description = desc;
             // Add note to array
             notesList.push(note);
-            // console.log(notesList);
+            console.log(notesList);
 
             //appending new note in notes-list section 
-            appendNewNoteToSection(note)
-            document.body.removeChild(newElement);
-            
+            appendNewNoteToSection(note);
+
+            //delete functionality - akash
+            //note delete functionality
+
+            //optimization scope - can add this eventlistener to newly added buttons only
+            const btns = document.getElementsByClassName('del-btn');
+            // console.log(btns);
+
+            for(let btn of btns){
+                btn.addEventListener('click', ()=>{
+
+                    let notesWithSameId = document.getElementsByClassName(btn.classList[0]);
+                
+                    for(let elem of notesWithSameId){
+                        elem.remove(); //removing from DOM
+                    }
+
+                });
+            }
+
         }
         else if (( title.length === 0) && (desc.length === 0)){
             alert("Please enter Title and Description")
@@ -227,6 +248,7 @@ createButton.addEventListener('click', () => {
             alert("Please enter Description for the note")
         }
         
+
     }
 
 );
