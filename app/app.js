@@ -7,7 +7,12 @@ let idHash = 0;
 
 let notesList = [];
 
+                    
+
+
+
 createButton.addEventListener('click', () => {
+
     let note = {
         title: "",
         description: "", 
@@ -46,6 +51,51 @@ createButton.addEventListener('click', () => {
         // bold button
     boldBtn.addEventListener('click', () => {
         var selectedText = '';
+
+        
+            //for selected text modificatons - akash
+        //experiment zone - Akash
+        // if(window.getSelection().baseNode.parentNode.id != "desc") return;
+
+            // let sel = window.getSelection();
+            // console.log(sel);
+            var textComponent = document.getElementById('desc');
+            var selectedText;
+          
+            if (textComponent.selectionStart !== undefined)
+            { // Standards-compliant version
+              var startPos = textComponent.selectionStart;
+              var endPos = textComponent.selectionEnd;
+              selectedText = textComponent.value.substring(startPos, endPos);
+            }
+            else if (document.selection !== undefined)
+            { // Internet Explorer version
+              textComponent.focus();
+              var sel = document.selection.createRange();
+              selectedText = sel.text;
+            }
+          
+            alert("You selected: " + selectedText);
+            selectedText = "";
+
+            // alert(sel);
+            // let range = sel.getRangeAt(0);
+            // sel.deleteFromDocument();
+            // alert('executed');
+
+            // let range = new Range();
+
+            // range.setStart(sel.anchorNode, sel.anchorOffset);
+            // range.setEnd(sel.focusNode, sel.focusOffset);
+
+            // console.log(range);
+            // console.log(range.deleteContents());
+
+            // for (let i = 0; i < sel.rangeCount; i++) {
+            //     console.log(sel.getRangeAt(i));
+            // }
+     
+
         // window.getSelection
         if (window.getSelection) {
             selectedText = window.getSelection();
@@ -116,11 +166,12 @@ createButton.addEventListener('click', () => {
         newCard.classList.add('note-'+idHash);
 
         let idForButton = "delete-btn-"+idHash;
+        let classForBtn = 'note-'+idHash;
 
         newCard.innerHTML = 
         "<h1>"+note.title+"</h2>"+
         "<p>"+note.description+"</p>"+
-        "<button id='"+idForButton+"'>"+" Delete </button>";
+        "<button class='"+classForBtn+" del-btn' id='"+idForButton+"'>"+" Delete </button>";
     
 
         console.log(newCard);
@@ -142,6 +193,26 @@ createButton.addEventListener('click', () => {
 
             //appending new note in notes-list section 
             appendNewNoteToSection(note)
+
+            //delete functionality - akash
+            //note delete functionality
+
+            //optimization scope - can add this eventlistener to newly added buttons only
+            const btns = document.getElementsByClassName('del-btn');
+            // console.log(btns);
+
+            for(let btn of btns){
+                btn.addEventListener('click', ()=>{
+
+                    let notesWithSameId = document.getElementsByClassName(btn.classList[0]);
+                
+                    for(let elem of notesWithSameId){
+                        elem.remove(); //removing from DOM
+                    }
+
+                });
+            }
+
         }
         else if (( title.length === 0) && (desc.length === 0)){
             alert("Please enter Title and Description")
@@ -151,6 +222,7 @@ createButton.addEventListener('click', () => {
             alert("Please enter Description for the note")
         }
         
+
     }
 
 );
@@ -242,3 +314,6 @@ createButton.addEventListener('click', () => {
 //     `;
 //     noteContainer.appendChild(newUINote);
 //   }
+
+
+
