@@ -11,6 +11,11 @@ let counter = 0;
 let idHash = 0;
 
 createButton.addEventListener('click', () => {
+
+    //if a createElement div already exists, return
+    let check = document.getElementById('new-card');
+    if(check)   return;
+
     counter++;
     let note = {
         idHash: counter,
@@ -27,7 +32,7 @@ createButton.addEventListener('click', () => {
 
         newElement = document.createElement('div');
 
-        newElement.innerHTML += `<div class="new-card">
+        newElement.innerHTML += `<div id="new-card">
         <button id="close-btn">&times;</button>
         <label for="title">Title</label>
         <input type="text" name="title" id="title">
@@ -236,9 +241,9 @@ createButton.addEventListener('click', () => {
                 });
             }
 
-            const addingElems = document.getElementsByClassName('new-card');
-            for(let elem of addingElems)
-                elem.remove();
+            const addingElem = document.getElementById('new-card');
+            
+            addingElem.remove();
 
         }
         else if (( title.length === 0) && (desc.length === 0)){

@@ -37,7 +37,7 @@ a{
     border-radius: 8px;
 }
 
-.new-card{
+#new-card{
     display: flex;
     flex-flow: column wrap;
     align-content: space-around;
